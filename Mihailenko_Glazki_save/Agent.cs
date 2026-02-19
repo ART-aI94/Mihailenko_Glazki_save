@@ -56,7 +56,7 @@ namespace Mihailenko_Glazki_save
                 foreach(ProductSale p in ProductSale)
                 {
                     TimeSpan differenceWithoutTime = DateTime.Today.Date - p.SaleDate.Date;
-                    if ((int)differenceWithoutTime.TotalDays <= 20365)
+                    if ((int)differenceWithoutTime.TotalDays > 1)
                         s += p.ProductCount;
                 }
                 return s;
