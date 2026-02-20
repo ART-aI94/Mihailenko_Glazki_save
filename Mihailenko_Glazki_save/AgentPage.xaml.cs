@@ -133,85 +133,71 @@ namespace Mihailenko_Glazki_save
         private void ChangePage(int direction, int? selectedPage)
         {
             CurrentPageList.Clear();
+
             CountRecords = TableList.Count;
-            if (CountRecords % 10 > 0)
-            {
-                CountPage = CountRecords / 10 + 1;
-            }
-            else if (CountRecords == 0)
+
+            if (CountRecords == 0)
             {
                 CountPage = 0;
+                return;
             }
-            else
+            int recordsPerPage = 10;  
+            int fullPagesCount = CountRecords / recordsPerPage;
+            bool Ostatok = CountRecords % recordsPerPage > 0;
+
+            CountPage = fullPagesCount;
+            if (Ostatok)
             {
-                CountPage = CountRecords / 10;
+                CountPage++; 
             }
-            Boolean Ifupdate = true;
-            int min;
+
+            int newPage = CurrentPage;
+
             if (selectedPage.HasValue)
             {
-                if (selectedPage >= 0 && selectedPage < CountPage)
-                {
-                    CurrentPage = (int)selectedPage;
-                    min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                    for (int i = CurrentPage * 10; i < min; i++)
-                    {
-                        CurrentPageList.Add(TableList[i]);
-                    }
-                }
+                newPage = selectedPage.Value;
             }
             else
             {
-                switch (direction)
-                {
-                    case 1:
-                        if (CurrentPage > 0)
-                        {
-                            CurrentPage--;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                            for (int i = CurrentPage * 10; i < min; i++)
-                            {
-                                CurrentPageList.Add(TableList[i]);
-                            }
-                        }
-                        else
-                        {
-                            Ifupdate = false;
-                        }
-                        break;
-                    case 2:
-                        if (CurrentPage < CountPage - 1)
-                        {
-                            CurrentPage++;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                            for (int i = CurrentPage * 10; i < min; i++)
-                            {
-                                CurrentPageList.Add(TableList[i]);
-                            }
-
-                        }
-                        else
-                        {
-                            Ifupdate = false;
-                        }
-                        break;
-                }
+                if (direction == 1) 
+                    newPage = CurrentPage - 1;
+                else if (direction == 2) 
+                    newPage = CurrentPage + 1;
             }
-            if (Ifupdate && CountRecords > 0)
+
+            if (newPage < 0 || newPage >= CountPage)
+                return;
+
+            CurrentPage = newPage;
+
+            int startIndex = CurrentPage * recordsPerPage;
+            int endIndex = startIndex + recordsPerPage;
+
+            if (endIndex > CountRecords)
+                endIndex = CountRecords;
+
+            for (int i = startIndex; i < endIndex; i++)
             {
-                PageListBox.Items.Clear();
-                for (int i = 1; i <= CountPage; i++)
-                {
-                    PageListBox.Items.Add(i);
-                }
-                PageListBox.SelectedIndex = CurrentPage;
-
-                min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                TBCount.Text = min.ToString();
-                TBAllRecords.Text = " из " + CountRecords.ToString();
-                AgentListView.ItemsSource = CurrentPageList;
-                AgentListView.Items.Refresh();
+                CurrentPageList.Add(TableList[i]);
             }
+
+            UpdatePageControls(endIndex);
+        }
+
+        private void UpdatePageControls(int endIndex)
+        {
+            PageListBox.Items.Clear();
+            for (int i = 1; i <= CountPage; i++)
+            {
+                PageListBox.Items.Add(i);
+            }
+            PageListBox.SelectedIndex = CurrentPage;
+
+            TBCount.Text = endIndex.ToString();
+            TBAllRecords.Text = $" из {CountRecords}";
+
+            AgentListView.ItemsSource = CurrentPageList;
+            AgentListView.Items.Refresh();
         }
 
         private void PageListBox_MouseUp(object sender, MouseButtonEventArgs e)

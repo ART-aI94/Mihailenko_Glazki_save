@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <Frame Grid.Row="0" Background="#FFE9F9"></Frame>
         <Image Source="/res/Глазки-save.png" HorizontalAlignment="Left"></Image>
-        <TextBlock Text="Глазки-save" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Text="Глазки-save" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Century Gothic"></TextBlock>
         <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" NavigationUIVisibility="Hidden"></Frame>
         <Button Content="Назад" Name="BtnBack" HorizontalAlignment="Right" Click="BtnBack_Click"></Button>
         <Frame Grid.Row="2" Background="#FFE9F9"></Frame>
