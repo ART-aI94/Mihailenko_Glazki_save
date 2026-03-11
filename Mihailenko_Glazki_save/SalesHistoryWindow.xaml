@@ -1,0 +1,36 @@
+﻿<Window x:Class="Mihailenko_Glazki_save.SalesHistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="История продаж" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+            <ComboBox Name="ProductBox" Width="200" Margin="5" 
+                      DisplayMemberPath="Title"
+                      IsEditable="True"
+                        KeyUp="ProductBox_KeyUp"/>
+                <TextBox Name="CountBox" Width="50" Margin="5" Text="1"/>
+                <DatePicker Name="DateBox" Width="120" Margin="5"/>
+                <Button Content="Добавить" Name="AddBtn" Width="80" Click="AddBtn_Click"/>
+                <Button Content="Удалить" Name="DeleteBtn" Width="80" Margin="5" Click="DeleteBtn_Click" IsEnabled="False"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" Name="SalesList" SelectionChanged="SalesList_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Продукт" Width="250" DisplayMemberBinding="{Binding Product.Title}"/>
+                    <GridViewColumn Header="Количество" Width="80" DisplayMemberBinding="{Binding ProductCount}"/>
+                    <GridViewColumn Header="Дата" Width="120" DisplayMemberBinding="{Binding SaleDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Content="Закрыть" Grid.Row="2" Width="80" HorizontalAlignment="Right" Name="CloseBtn" Click="CloseBtn_Click" Margin="5"/>
+    </Grid>
+</Window>

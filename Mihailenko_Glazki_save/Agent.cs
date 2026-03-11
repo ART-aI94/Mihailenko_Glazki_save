@@ -12,6 +12,8 @@ namespace Mihailenko_Glazki_save
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
 
     public partial class Agent
     {
@@ -96,7 +98,7 @@ namespace Mihailenko_Glazki_save
         {
             get
             {
-                if (Discount > 25)
+                if (Discount >= 25)
                     return "LightGreen";
                 else
                     return "white";

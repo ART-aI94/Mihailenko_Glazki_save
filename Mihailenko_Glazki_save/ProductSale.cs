@@ -11,7 +11,7 @@ namespace Mihailenko_Glazki_save
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class ProductSale
     {
         public int ID { get; set; }
@@ -26,7 +26,7 @@ namespace Mihailenko_Glazki_save
                 return ProductCount * Product.MinCostForAgent;
             }
         }
-    
+
         public virtual Agent Agent { get; set; }
         public virtual Product Product { get; set; }
     }

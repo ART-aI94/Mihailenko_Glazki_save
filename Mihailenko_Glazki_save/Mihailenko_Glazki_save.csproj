@@ -103,6 +103,9 @@
     <Compile Include="ProductType.cs">
       <DependentUpon>MihailenkoDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="SalesHistoryWindow.xaml.cs">
+      <DependentUpon>SalesHistoryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shop.cs">
       <DependentUpon>MihailenkoDB.tt</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PriorChange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SalesHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -25,33 +25,43 @@ namespace Mihailenko_Glazki_save
         int CurrentPage = 0;
         List<Agent> CurrentPageList = new List<Agent>();
         List<Agent> TableList;
+
+        static int savedTypeIndex = 0;
+        static int savedSortIndex = 0;
+        static string savedSearchText = "";
         public AgentPage()
         {
             InitializeComponent();
+            ComboType.SelectedIndex = savedTypeIndex;
+            ComboType2.SelectedIndex = savedSortIndex;
+            TBoxSearch.Text = savedSearchText;
+
             var currentAgent = MihailenkoGlazkiEntities.GetContext().Agent.ToList();
             AgentListView.ItemsSource = currentAgent;
-            ComboType.SelectedIndex = 0;
-            ComboType2.SelectedIndex = 0;
+            UpdateAgents();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage());
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Agent));
         }
 
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            savedSearchText = TBoxSearch.Text;
             UpdateAgents();
         }
 
         private void ComboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            savedTypeIndex = ComboType.SelectedIndex;
             UpdateAgents();
         }
 
 
         private void ComboType2_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
+            savedSortIndex = ComboType2.SelectedIndex;
             UpdateAgents();
         }
 
@@ -66,18 +76,48 @@ namespace Mihailenko_Glazki_save
                 }
             }
             PriorChange prior = new PriorChange(maxPriority);
-            prior.ShowDialog();
 
-            int newPriority = Convert.ToInt32(prior.TBPriority.Text);
-            foreach (Agent agent in AgentListView.SelectedItems)
+            if (prior.ShowDialog() == true)
             {
-                agent.Priority = newPriority;
+                int newPriority = Convert.ToInt32(prior.TBPriority.Text);
+
+                var context = MihailenkoGlazkiEntities.GetContext();
+
+                foreach (Agent agent in AgentListView.SelectedItems)
+                {
+                    var agentFromDb = context.Agent.Find(agent.ID);
+                    if (agentFromDb != null)
+                    {
+                        int oldPriority = agentFromDb.Priority;
+                        agentFromDb.Priority = newPriority;
+
+                        // Добавляем в историю
+                        AgentPriorityHistory history = new AgentPriorityHistory
+                        {
+                            AgentID = agentFromDb.ID,
+                            ChangeDate = DateTime.Now,
+                            PriorityValue = newPriority
+                        };
+                        context.AgentPriorityHistory.Add(history);
+                    }
+                }
+
+                try
+                {
+                    context.SaveChanges();
+                    MessageBox.Show("Приоритет изменен");
+                    UpdateAgents();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка: {ex.Message}");
+                }
             }
         }
 
         private void addAgentBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            Manager.MainFrame.Navigate(new AddEditPage(null));
         }
 
         private void AgentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -118,6 +158,7 @@ namespace Mihailenko_Glazki_save
             AgentListView.ItemsSource = currentAgents;
             TableList = currentAgents;
             ChangePage(0, 0);
+            AgentListView.Items.Refresh();
         }
 
         private void LeftDirButton_Click(object sender, RoutedEventArgs e)

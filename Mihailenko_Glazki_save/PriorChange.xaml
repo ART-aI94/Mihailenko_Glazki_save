@@ -10,9 +10,13 @@
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Label Content="Приоритет" Width="120" FontSize="20" ></Label>
-                <TextBlock Text="" Name="TBPriority" FontSize="20" Width="200" VerticalAlignment="Center"></TextBlock>
+                <TextBox Text="" Name="TBPriority" FontSize="20" Width="200" VerticalAlignment="Center"></TextBox>
             </StackPanel>
-            <Button Name="ChangePrior" Content="Изменять приоритет" FontSize="20" Width="200" HorizontalAlignment="Left" Click="ChangePrior_Click"></Button>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Content="Изменить" Width="100" Click="ChangePrior_Click" Margin="5"/>
+                <Button Content="Отмена" Width="60" Click="Button_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

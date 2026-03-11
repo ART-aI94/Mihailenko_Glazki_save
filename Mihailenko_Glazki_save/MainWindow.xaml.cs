@@ -41,7 +41,7 @@ namespace Mihailenko_Glazki_save
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.GoBack();
+            Manager.MainFrame.Navigate(new AgentPage());
         }
     }
 }

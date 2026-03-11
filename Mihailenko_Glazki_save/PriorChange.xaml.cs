@@ -32,11 +32,26 @@ namespace Mihailenko_Glazki_save
                 MessageBox.Show("заполните поле");
                 return;
             }
-            if (Convert.ToInt32(TBPriority.Text) < 0)
+
+            if (!int.TryParse(TBPriority.Text, out int priority))
+            {
+                MessageBox.Show("введите число");
+                return;
+            }
+
+            if (priority < 0)
             {
                 MessageBox.Show("приоритет не может быть отрицательным");
                 return;
             }
+
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
             this.Close();
         }
     }
